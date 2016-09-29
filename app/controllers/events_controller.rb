@@ -8,7 +8,7 @@ class EventsController < ApplicationController
       format.json { render :json => @events.to_json }
     end
   end
-
+ r
   def new
     @event = Event.new
   end
@@ -56,6 +56,6 @@ class EventsController < ApplicationController
   end
 
   def params_event
-    params.require(:event).permit(:name, :description, :capacity , :category_id)
+    params.require(:event).permit(:name, :description, :capacity , :category_id , :group_ids => [])
   end
 end

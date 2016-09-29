@@ -8,5 +8,5 @@ class Event < ApplicationRecord
   has_one :location
 
   delegate :name , :to => :category , :prefix => true , :allow_nil => true
-  delegate :name , :to => :location , :prefix => true , :allow_nil => true``
+  delegate :name , :to => :location , :prefix => true , :allow_nil => true
 end
