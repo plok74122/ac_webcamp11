@@ -1,0 +1,12 @@
+<h1>Create location for Event:<%= @event.name %></h1>
+
+<%= form_for @location, :url => event_location_path(@event) do |f| %>
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name, :class => "form-control" %>
+    </div>
+    <div class="form-group">
+      <%= f.submit :class => "btn btn-default" %>
+    </div>
+<% end %>
+

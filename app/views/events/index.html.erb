@@ -3,6 +3,7 @@
   <tr>
     <th>名稱</th>
     <th>Attendees</th>
+    <th>new location</th>
     <th>show</th>
     <th>edit</th>
     <th>destroy</th>
@@ -11,6 +12,7 @@
     <tr>
       <td><%= event.name %></td>
       <td><%= link_to "attendees" ,event_attendees_path(event) %></td>
+      <td><%= link_to "new location" ,new_event_location_path(event) %></td>
       <td><%= link_to "show" , event_path(event) %></td>
       <td><%= link_to "edit" , edit_event_path(event) %></td>
       <td><%= button_to "destroy" , event_path(event) ,:method => :delete %></td>
