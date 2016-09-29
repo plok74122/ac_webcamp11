@@ -1,0 +1,5 @@
+<h1>Create New Attendee</h1>
+
+<%= form_for @attendee, :url => event_attendees_path(@event) do |f| %>
+  <%= render :partial => "form" ,:locals => {:f => f , :attendee => @attendee} %>
+<% end %>
