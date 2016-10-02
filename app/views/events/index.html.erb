@@ -1,7 +1,7 @@
-<%= form_tag events_path ,:method => :get do %>
+<%= form_tag events_path, :method => :get do %>
     <div class="form-group">
       <%= text_field_tag :keyword, nil, :class => "form-control" %>
-      <%= submit_tag "搜尋" , :class => "btn btn-default" %>
+      <%= submit_tag "搜尋", :class => "btn btn-default" %>
     </div>
 <% end %>
 
@@ -14,24 +14,34 @@
 <h1>Event List</h1>
 <table class="table table-striped">
   <tr>
+    <th></th>
     <th><%= link_to "名稱", events_path(:order => "name") %></th>
     <th><%= link_to "Created_at", events_path(:order => "created_at") %></th>
+    <th>is_public</th>
     <th>Attendees</th>
     <th>new location</th>
     <th>show</th>
     <th>edit</th>
     <th>destroy</th>
   </tr>
-  <% @events.each do |event| %>
-      <tr>
-        <td><%= event.name %></td>
-        <td><%= event.created_at %></td>
-        <td><%= link_to "attendees", event_attendees_path(event) %></td>
-        <td><%= link_to "new location", new_event_location_path(event) %></td>
-        <td><%= link_to "show", event_path(event) %></td>
-        <td><%= link_to "edit", edit_event_path(event) %></td>
-        <td><%= button_to "destroy", event_path(event), :method => :delete %></td>
-      </tr>
+  <%= form_tag bulk_update_events_path, :method => :post do %>
+      <% @events.each do |event| %>
+          <tr>
+            <td><%= check_box_tag "ids[]", event.id, false %></td>
+            <td><%= event.name %></td>
+            <td><%= event.created_at %></td>
+            <td><%= show_public(event.is_public) %></td>
+            <td><%= link_to "attendees", event_attendees_path(event) %></td>
+            <td><%= link_to "new location", new_event_location_path(event) %></td>
+            <td><%= link_to "show", event_path(event) %></td>
+            <td><%= link_to "edit", edit_event_path(event) %></td>
+            <td><%= link_to "destroy", event_path(event), :method => :delete %></td>
+          </tr>
+      <% end %>
+      <div class="form-group">
+        <%= submit_tag "bulk_update", data: { confirm: "Are you sure?" }, :class => "btn btn-info" %>
+        <%= submit_tag "bulk_delete", data: { confirm: "Are you sure?" }, :class => "btn btn-danger" %>
+      </div>
   <% end %>
 </table>
 <%= paginate @events %>

@@ -2,6 +2,9 @@ namespace :dev do
   desc "重建一些假資料"
   task :rebuild => ["db:reset", :fake]
   task :fake => :environment do
+    10.times do
+      User.create(:email => Faker::Internet.email , :password => "12345678" ,:role => User::ROLE.sample)
+    end
     Group.create(:name => "Ruby")
     Group.create(:name => "PHP")
     Group.create(:name => ".NET")
@@ -14,7 +17,7 @@ namespace :dev do
     Category.create(:name => "Category E")
     20.times do
       capacity = (5..10).to_a.sample
-      event = Event.create(:name => Faker::Name.name, :description => Faker::Hipster.paragraph, :category => Category.all.sample, :capacity => capacity)
+      event = Event.create(:name => Faker::Name.name, :description => Faker::Hipster.paragraph, :category => Category.all.sample, :capacity => capacity , :user => User.all.sample)
       puts "create event id is #{event.id}"
       capacity.times do
         attendee = event.attendees.create(:name => Faker::Pokemon.name)

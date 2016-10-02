@@ -1,8 +1,8 @@
 class EventsController < ApplicationController
   before_action :set_event, :only => [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   def index
-
     if params[:group]
       @group = Group.find_by_name(params[:group])
       @events = @group.events.page(params[:page]).per(25)
@@ -17,7 +17,7 @@ class EventsController < ApplicationController
     end
 
     if params[:keyword]
-      @events = @events.where("name like ?" , "%#{params[:keyword]}%")
+      @events = @events.where("name like ?", "%#{params[:keyword]}%")
     end
 
     respond_to do |format|
@@ -67,12 +67,22 @@ class EventsController < ApplicationController
     redirect_to events_path
   end
 
+  def bulk_update
+    if params[:commit] == "bulk_update"
+      Event.where("id in (?)" , params[:ids]).update(:is_public => true)
+    elsif params[:commit] == "bulk_delete"
+      # Event.destroy(params[:ids])
+      Event.where("id in (?)" , params[:ids]).destroy_all
+    end
+    redirect_to events_path
+  end
+
   private
   def set_event
     @event = Event.find(params[:id])
   end
 
   def params_event
-    params.require(:event).permit(:name, :description, :capacity , :category_id , :group_ids => [])
+    params.require(:event).permit(:name, :description, :capacity, :category_id, :group_ids => [])
   end
 end
