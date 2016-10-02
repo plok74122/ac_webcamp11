@@ -1,7 +1,21 @@
+<%= form_tag events_path ,:method => :get do %>
+    <div class="form-group">
+      <%= text_field_tag :keyword, nil, :class => "form-control" %>
+      <%= submit_tag "搜尋" , :class => "btn btn-default" %>
+    </div>
+<% end %>
+
+<div class="btn-group">
+  <% Group.all.each do |g| %>
+      <%= link_to g.name, events_path(:group => g.name), :class => "btn btn-success" %>
+  <% end %>
+</div>
+
 <h1>Event List</h1>
 <table class="table table-striped">
   <tr>
-    <th>名稱</th>
+    <th><%= link_to "名稱", events_path(:order => "name") %></th>
+    <th><%= link_to "Created_at", events_path(:order => "created_at") %></th>
     <th>Attendees</th>
     <th>new location</th>
     <th>show</th>
@@ -9,15 +23,16 @@
     <th>destroy</th>
   </tr>
   <% @events.each do |event| %>
-    <tr>
-      <td><%= event.name %></td>
-      <td><%= link_to "attendees" ,event_attendees_path(event) %></td>
-      <td><%= link_to "new location" ,new_event_location_path(event) %></td>
-      <td><%= link_to "show" , event_path(event) %></td>
-      <td><%= link_to "edit" , edit_event_path(event) %></td>
-      <td><%= button_to "destroy" , event_path(event) ,:method => :delete %></td>
-    </tr>
+      <tr>
+        <td><%= event.name %></td>
+        <td><%= event.created_at %></td>
+        <td><%= link_to "attendees", event_attendees_path(event) %></td>
+        <td><%= link_to "new location", new_event_location_path(event) %></td>
+        <td><%= link_to "show", event_path(event) %></td>
+        <td><%= link_to "edit", edit_event_path(event) %></td>
+        <td><%= button_to "destroy", event_path(event), :method => :delete %></td>
+      </tr>
   <% end %>
 </table>
 <%= paginate @events %>
-<%= link_to "new event" , new_event_path %>
+<%= link_to "new event", new_event_path %>

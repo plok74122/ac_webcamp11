@@ -2,13 +2,30 @@ class EventsController < ApplicationController
   before_action :set_event, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @events = Event.page(params[:page]).per(25)
+
+    if params[:group]
+      @group = Group.find_by_name(params[:group])
+      @events = @group.events.page(params[:page]).per(25)
+    else
+      @events = Event.page(params[:page]).per(25)
+    end
+
+    if params[:order] == "name"
+      @events = @events.order(:name)
+    elsif params[:order] == "created_at"
+      @events = @events.order(:created_at)
+    end
+
+    if params[:keyword]
+      @events = @events.where("name like ?" , "%#{params[:keyword]}%")
+    end
+
     respond_to do |format|
       format.html
       format.json { render :json => @events.to_json }
     end
   end
- r
+
   def new
     @event = Event.new
   end
