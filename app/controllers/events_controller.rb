@@ -32,6 +32,12 @@ class EventsController < ApplicationController
 
   def create
     @event = Event.new(params_event)
+    {:name => "111" , :description => "222"}
+    @event.name = params[:event][:name]
+    @event.description = params[:event][:description]
+
+    @event.full_name = params[:event][:full_name]
+    @event.user = current_user
     if @event.save
       flash[:notice]="新增成功"
       redirect_to event_path(@event)
@@ -69,10 +75,10 @@ class EventsController < ApplicationController
 
   def bulk_update
     if params[:commit] == "bulk_update"
-      Event.where("id in (?)" , params[:ids]).update(:is_public => true)
+      Event.where("id in (?)", params[:ids]).update(:is_public => true)
     elsif params[:commit] == "bulk_delete"
       # Event.destroy(params[:ids])
-      Event.where("id in (?)" , params[:ids]).destroy_all
+      Event.where("id in (?)", params[:ids]).destroy_all
     end
     redirect_to events_path
   end
@@ -83,6 +89,6 @@ class EventsController < ApplicationController
   end
 
   def params_event
-    params.require(:event).permit(:name, :description, :capacity, :category_id, :group_ids => [])
+    params.require(:event).permit(:name, :description, :capacity, :category_id, :full_name, :group_ids => [])
   end
 end
